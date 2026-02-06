@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuantumLeap | AI-Driven Digital Twin for Atom Interferometry</title>
+  <meta name="description" content="QuantumLeap delivers the world's first validated, AI-driven digital twin for atom interferometers—transforming quantum sensor development from years of physical iteration into minutes of software-defined prediction.">
+  <style>
+    /* ============================================
+       CSS VARIABLES / BRAND TOKENS
+    ============================================ */
+    :root {
+      --bg: #0A0D12;
+      --bg2: #06080C;
+      --surface: #101722;
+      --text: #EAEAEA;
+      --muted: rgba(234,234,234,0.72);
+      --border: rgba(255,255,255,0.08);
+      --accent: #4DD6FF;
+      --accent2: #F5C842;
+      --radius: 16px;
+      --radius2: 12px;
+      --gap: 24px;
+      --shadow: 0 10px 30px rgba(0,0,0,0.35);
+      --t: 200ms ease;
+
+      /* Spacing */
+      --container-padding: 48px;
+      --grid-gap: 24px;
+
+      /* Typography */
+      --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    }
+
+    @media (max-width: 1024px) {
+      :root {
+        --container-padding: 32px;
+        --grid-gap: 20px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      :root {
+        --container-padding: 20px;
+        --grid-gap: 16px;
+      }
+    }
+
+    /* ============================================
+       RESET & BASE
+    ============================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-family);
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text);
+      background-color: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      line-height: 1.2;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    h1 { font-size: 3.5rem; }
+    h2 { font-size: 2.25rem; }
+    h3 { font-size: 1.25rem; }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 2.25rem; }
+      h2 { font-size: 1.75rem; }
+      h3 { font-size: 1.125rem; }
+    }
+
+    p {
+      color: var(--muted);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* ============================================
+       LAYOUT CLASSES
+    ============================================ */
+    .page-wrap {
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .section {
+      padding: 96px 0;
+    }
+
+    @media (max-width: 768px) {
+      .section {
+        padding: 64px 0;
+      }
+    }
+
+    .container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding-left: var(--container-padding);
+      padding-right: var(--container-padding);
+    }
+
+    .grid-12 {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--grid-gap);
+    }
+
+    @media (max-width: 1024px) {
+      .grid-12 {
+        grid-template-columns: repeat(8, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .grid-12 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .stack-8 { display: flex; flex-direction: column; gap: 8px; }
+    .stack-16 { display: flex; flex-direction: column; gap: 16px; }
+    .stack-24 { display: flex; flex-direction: column; gap: 24px; }
+    .stack-32 { display: flex; flex-direction: column; gap: 32px; }
+
+    .center { text-align: center; }
+    .text-muted { color: var(--muted); }
+
+    /* ============================================
+       THEME CLASSES
+    ============================================ */
+    .bg-dark { background-color: var(--bg); }
+    .bg-darker { background-color: var(--bg2); }
+
+    /* ============================================
+       NAVIGATION
+    ============================================ */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(10, 13, 18, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 var(--container-padding);
+    }
+
+    .nav-logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-logo span {
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .nav-links a {
+      font-size: 0.875rem;
+      color: var(--muted);
+      transition: color var(--t);
+      font-weight: 500;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-cta {
+      margin-left: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .nav-links {
+        display: none;
+      }
+      .nav-cta {
+        margin-left: 0;
+      }
+    }
+
+    /* ============================================
+       BUTTONS
+    ============================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 24px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border-radius: var(--radius2);
+      border: none;
+      cursor: pointer;
+      transition: all var(--t);
+      font-family: var(--font-family);
+    }
+
+    .btn-lg {
+      padding: 16px 32px;
+      font-size: 1rem;
+    }
+
+    .btn-sm {
+      padding: 8px 16px;
+      font-size: 0.8125rem;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    .btn-primary:hover {
+      background: #6de0ff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(77, 214, 255, 0.3);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover {
+      background: var(--surface);
+      border-color: var(--muted);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* ============================================
+       CARDS
+    ============================================ */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      transition: all var(--t);
+    }
+
+    .card-hover:hover {
+      border-color: rgba(77, 214, 255, 0.3);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+
+    .card h3 {
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    .card p {
+      font-size: 0.9375rem;
+    }
+
+    .card ul {
+      margin-top: 16px;
+    }
+
+    .card ul li {
+      padding: 8px 0;
+      color: var(--muted);
+      font-size: 0.9375rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .card ul li::before {
+      content: '→';
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .image-card {
+      background: linear-gradient(135deg, var(--surface) 0%, rgba(16, 23, 34, 0.5) 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      position: relative;
+      overflow: hidden;
+      min-height: 300px;
+    }
+
+    .image-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(77, 214, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(77, 214, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .image-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 0%, var(--bg) 70%);
+    }
+
+    .image-card span {
+      position: relative;
+      z-index: 1;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .validation-banner {
+      background: linear-gradient(135deg, rgba(77, 214, 255, 0.08) 0%, rgba(245, 200, 66, 0.05) 100%);
+      border: 1px solid rgba(77, 214, 255, 0.2);
+      border-radius: var(--radius2);
+      padding: 24px 32px;
+      margin-top: 32px;
+    }
+
+    .validation-table {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 48px;
+    }
+
+    .validation-table dt {
+      color: var(--muted);
+      font-size: 0.9375rem;
+    }
+
+    .validation-table dd {
+      color: var(--accent);
+      font-family: var(--font-mono);
+      font-size: 0.9375rem;
+      font-weight: 600;
+    }
+
+    @media (max-width: 640px) {
+      .validation-table {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .validation-table dd {
+        margin-bottom: 12px;
+      }
+    }
+
+    /* ============================================
+       METRICS
+    ============================================ */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--gap);
+    }
+
+    @media (max-width: 1024px) {
+      .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .metric {
+      text-align: center;
+      padding: 24px;
+    }
+
+    .metric-number {
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--accent);
+      font-family: var(--font-mono);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .metric-label {
+      font-size: 0.875rem;
+      color: var(--muted);
+    }
+
+    /* ============================================
+       HERO SECTION
+    ============================================ */
+    .section-hero {
+      position: relative;
+      min-height: calc(100vh - 72px);
+      display: flex;
+      align-items: center;
+      padding: 64px 0;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 70% 20%, rgba(77, 214, 255, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 30% 80%, rgba(245, 200, 66, 0.04) 0%, transparent 40%);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(77, 214, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(77, 214, 255, 0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: heroGrid 30s linear infinite;
+    }
+
+    @keyframes heroGrid {
+      to { background-position: 60px 60px; }
+    }
+
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-text {
+      grid-column: span 6;
+    }
+
+    .hero-visual {
+      grid-column: span 6;
+    }
+
+    @media (max-width: 1024px) {
+      .hero-text {
+        grid-column: span 8;
+      }
+      .hero-visual {
+        grid-column: span 8;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-text, .hero-visual {
+        grid-column: span 1;
+      }
+      .hero-visual {
+        display: none;
+      }
+    }
+
+    .hero-text h1 {
+      margin-bottom: 24px;
+    }
+
+    .hero-text .subhead {
+      font-size: 1.125rem;
+      color: var(--muted);
+      margin-bottom: 32px;
+      max-width: 540px;
+      line-height: 1.7;
+    }
+
+    .hero-text .btn-group {
+      margin-bottom: 48px;
+    }
+
+    .cred-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .cred-strip span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cred-strip span::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      opacity: 0.7;
+    }
+
+    .hero-visual .image-card {
+      height: 100%;
+      min-height: 450px;
+    }
+
+    /* ============================================
+       SECTION HEADERS
+    ============================================ */
+    .section-header {
+      max-width: 760px;
+      margin-bottom: 48px;
+    }
+
+    .section-header.center {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .eyebrow {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .section-header h2 {
+      margin-bottom: 20px;
+    }
+
+    .section-header p {
+      font-size: 1.0625rem;
+      line-height: 1.7;
+    }
+
+    .section-header .bold-line {
+      color: var(--text);
+      font-weight: 600;
+      font-style: italic;
+      margin-top: 24px;
+    }
+
+    /* ============================================
+       CARDS GRID
+    ============================================ */
+    .cards-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--gap);
+    }
+
+    .cards-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--gap);
+    }
+
+    .cards-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--gap);
+    }
+
+    @media (max-width: 1024px) {
+      .cards-grid-3, .cards-grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .cards-grid-2, .cards-grid-3, .cards-grid-4 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ============================================
+       PROCESS STRIP
+    ============================================ */
+    .process-strip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 24px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+
+    .process-step {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.9375rem;
+    }
+
+    .process-step::after {
+      content: '→';
+      color: var(--accent);
+      font-size: 1.25rem;
+    }
+
+    .process-step:last-child::after {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .process-strip {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .process-step::after {
+        display: none;
+      }
+      .process-step::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        background: var(--accent);
+        border-radius: 50%;
+      }
+    }
+
+    .process-details {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: var(--gap);
+      margin-top: 32px;
+    }
+
+    @media (max-width: 1024px) {
+      .process-details {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .process-details {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .process-detail-item h4 {
+      color: var(--accent);
+      font-size: 0.9375rem;
+      margin-bottom: 8px;
+    }
+
+    .process-detail-item p {
+      font-size: 0.875rem;
+    }
+
+    /* ============================================
+       ECOSYSTEM SECTION
+    ============================================ */
+    .ecosystem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--gap);
+    }
+
+    @media (max-width: 640px) {
+      .ecosystem-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .ecosystem-card h3 {
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .ecosystem-card.amber h3 {
+      color: var(--accent2);
+    }
+
+    /* ============================================
+       VALIDATION SECTION
+    ============================================ */
+    .validation-section {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .validation-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(77, 214, 255, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 100%, rgba(245, 200, 66, 0.04) 0%, transparent 40%);
+      pointer-events: none;
+    }
+
+    .validation-highlights {
+      margin: 32px 0;
+    }
+
+    .validation-highlights li {
+      padding: 10px 0;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1rem;
+    }
+
+    .validation-highlights li::before {
+      content: '✓';
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* ============================================
+       PARTNER CARDS
+    ============================================ */
+    .partner-card {
+      text-align: center;
+      padding: 40px 32px;
+    }
+
+    .partner-card h3 {
+      margin-bottom: 12px;
+    }
+
+    .partner-card p {
+      font-size: 0.875rem;
+    }
+
+    /* ============================================
+       UPDATE CARDS
+    ============================================ */
+    .update-card {
+      padding: 24px;
+    }
+
+    .update-card h4 {
+      color: var(--text);
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    .update-card p {
+      font-size: 0.875rem;
+    }
+
+    /* ============================================
+       FINAL CTA
+    ============================================ */
+    .final-cta {
+      text-align: center;
+      position: relative;
+    }
+
+    .final-cta h2 {
+      margin-bottom: 20px;
+    }
+
+    .final-cta > p {
+      font-size: 1.0625rem;
+      max-width: 680px;
+      margin: 0 auto 32px;
+    }
+
+    .final-cta .btn-group {
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+
+    .final-cta .tagline {
+      font-size: 0.875rem;
+      color: var(--muted);
+    }
+
+    /* ============================================
+       FOOTER
+    ============================================ */
+    .footer {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      padding: 64px 0 32px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+
+    @media (max-width: 1024px) {
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .footer-brand .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+    }
+
+    .footer-brand .logo span {
+      color: var(--accent);
+    }
+
+    .footer-brand p {
+      font-size: 0.875rem;
+      color: var(--muted);
+      max-width: 280px;
+    }
+
+    .footer-column h4 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .footer-column ul li {
+      margin-bottom: 10px;
+    }
+
+    .footer-column ul li a {
+      font-size: 0.875rem;
+      color: var(--muted);
+      transition: color var(--t);
+    }
+
+    .footer-column ul li a:hover {
+      color: var(--text);
+    }
+
+    .footer-bottom {
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-bottom p {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrap">
+
+    <!-- NAVIGATION -->
+    <nav class="nav">
+      <div class="nav-inner">
+        <a href="#top" class="nav-logo">Quantum<span>Leap</span></a>
+        <div class="nav-links">
+          <a href="#top">Home</a>
+          <a href="#platform">Platform</a>
+          <a href="#use-cases">Use Cases</a>
+          <a href="#validation">Validation</a>
+          <a href="#ecosystem">Ecosystem</a>
+          <a href="#partners">Partners</a>
+          <a href="#about">About</a>
+          <a href="#updates">Updates</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <div class="nav-cta">
+          <a href="#contact" class="btn btn-primary btn-sm">Partner Access</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="section-hero" id="top">
+      <div class="hero-bg"></div>
+      <div class="hero-overlay"></div>
+      <div class="container">
+        <div class="grid-12 hero-grid">
+          <div class="hero-text">
+            <h1>The AI Digital Twin for Atom Interferometry</h1>
+            <p class="subhead">QuantumLeap delivers the world's first validated, AI-driven digital twin for atom interferometers—transforming quantum sensor development from years of physical iteration into minutes of software-defined prediction.</p>
+            <div class="btn-group">
+              <a href="#contact" class="btn btn-primary btn-lg">Request Partnership Access</a>
+              <a href="#ecosystem" class="btn btn-outline btn-lg">Join the Community</a>
+            </div>
+            <div class="cred-strip">
+              <span>Validated Digital Twin</span>
+              <span>Real-to-Sim Learning</span>
+              <span>GB300 SuperPod</span>
+              <span>GPS-Denied PNT</span>
+            </div>
+          </div>
+          <div class="hero-visual">
+            <div class="image-card">
+              <span>Hybrid Hero Visual<br>(Interference fringes + lab instrumentation + waveforms)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- THE BIG BET / PLATFORM -->
+    <section class="section bg-darker" id="platform">
+      <div class="container">
+        <div class="section-header center">
+          <p class="eyebrow">The Big Bet</p>
+          <h2>The AlphaFold Moment for Quantum Sensing</h2>
+          <p>Atom interferometers are among the most promising technologies for GPS-denied navigation, gravimetry, and precision sensing. Yet their development remains constrained by slow, expensive, and fragile physical experimentation.</p>
+          <p style="margin-top: 16px;">QuantumLeap makes a different bet: that validated, continuously learning AI can replace most early-stage hardware iteration—without sacrificing scientific rigor or mission trust.</p>
+        </div>
+        <div class="cards-grid-3">
+          <div class="card card-hover">
+            <h3>60% Faster Validation Cycles</h3>
+            <p>Collapse concept-to-prototype timelines by replacing months of physical testing with validated prediction.</p>
+          </div>
+          <div class="card card-hover">
+            <h3>1000× Design Iteration</h3>
+            <p>Explore orders of magnitude more configurations than any laboratory could physically test.</p>
+          </div>
+          <div class="card card-hover">
+            <h3>Democratized Access</h3>
+            <p>Bring advanced quantum sensor design within reach of students, researchers, and partners worldwide.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CORE INNOVATIONS -->
+    <section class="section bg-dark">
+      <div class="container">
+        <div class="section-header center">
+          <p class="eyebrow">Core Innovations</p>
+          <h2>Two Breakthroughs. One Platform.</h2>
+        </div>
+        <div class="cards-grid-2">
+          <div class="card card-hover">
+            <h3>Real-to-Sim Collaborative Learning</h3>
+            <p>QuantumLeap continuously improves by incorporating real experimental data from distributed institutions worldwide. Each validated contribution refines model accuracy for the entire community, creating compounding network effects.</p>
+            <ul>
+              <li>Standardized experimental schemas</li>
+              <li>Automated validation and peer review</li>
+              <li>Attribution and academic credit</li>
+              <li>Federated learning for sensitive data</li>
+            </ul>
+          </div>
+          <div class="card card-hover">
+            <h3>Validated Digital Twin as Hardware Replacement</h3>
+            <p>QuantumLeap is designed to substitute for physical atom interferometer hardware in design exploration, mission planning, algorithm development, and training—within rigorously defined accuracy envelopes.</p>
+            <ul>
+              <li>&lt;5% MAE target for certified use cases</li>
+              <li>Mission planning and Monte Carlo analysis</li>
+              <li>Virtual sensor output streams</li>
+              <li>Qualification and renewal framework</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section bg-darker">
+      <div class="container">
+        <div class="section-header center">
+          <p class="eyebrow">Workflow</p>
+          <h2>From Design to Deployment—In Software</h2>
+        </div>
+        <div class="process-strip">
+          <span class="process-step">Design</span>
+          <span class="process-step">Predict</span>
+          <span class="process-step">Validate</span>
+          <span class="process-step">Improve</span>
+          <span class="process-step">Deploy</span>
+        </div>
+        <div class="process-details">
+          <div class="process-detail-item">
+            <h4>Design</h4>
+            <p>Assemble interferometer configurations using validated components and realistic environments.</p>
+          </div>
+          <div class="process-detail-item">
+            <h4>Predict</h4>
+            <p>AI models generate performance predictions with uncertainty bounds in minutes.</p>
+          </div>
+          <div class="process-detail-item">
+            <h4>Validate</h4>
+            <p>Benchmark against physical systems and community-contributed data.</p>
+          </div>
+          <div class="process-detail-item">
+            <h4>Improve</h4>
+            <p>Models retrain continuously as new experimental data is added.</p>
+          </div>
+          <div class="process-detail-item">
+            <h4>Deploy</h4>
+            <p>Use validated twins for mission planning, optimization, and training.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- USE CASES -->
+    <section class="section bg-dark" id="use-cases">
+      <div class="container">
+        <div class="section-header center">
+          <p class="eyebrow">Use Cases</p>
+          <h2>Built for Research, Operations, and Transition to Field</h2>
+        </div>
+        <div class="cards-grid-4">
+          <div class="card card-hover">
+            <h3>Design Optimization Without Prototyping</h3>
+            <p>Evaluate hundreds of configurations virtually before building a single physical system.</p>
+          </div>
+          <div class="card card-hover">
+            <h3>Real-to-Sim Data Contribution</h3>
+            <p>Contribute experimental results, improve global accuracy, and receive attribution.</p>
+          </div>
+          <div class="card card-hover">
+            <h3>GPS-Denied Mission Planning</h3>
+            <p>Simulate thousands of operational scenarios to support acquisition and planning decisions.</p>
+          </div>
+          <div class="card card-hover">
+            <h3>Federated Learning with Proprietary Data</h3>
+            <p>Improve shared models while keeping sensitive data local and protected.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VALIDATION -->
+    <section class="section bg-darker validation-section" id="validation">
+      <div class="container">
+        <div class="section-header">
+          <p class="eyebrow">Validation</p>
+          <h2>Validation Is the Product</h2>
+          <p>QuantumLeap is built around a formal validation framework that defines where and how the digital twin can be trusted. Accuracy targets, benchmark systems, and certification pathways are explicit, measured, and continuously audited.</p>
+          <ul class="validation-highlights">
+            <li>Accuracy thresholds by application domain</li>
+            <li>Cross-laboratory validation (3+ institutions)</li>
+            <li>Benchmark systems including NPS, JILA, and MIT Lincoln Lab</li>
+            <li>Full provenance tracking for every model version</li>
+          </ul>
+          <p class="bold-line">"Every prediction is traceable—to data, contributors, and measured accuracy."</p>
+          <div style="margin-top: 32px;">
+            <a href="#partners" class="btn btn-primary">Become a Benchmark Partner</a>
+          </div>
+        </div>
+        <div class="validation-banner">
+          <dl class="validation-table">
+            <dt>Design Exploration</dt>
+            <dd>&lt;10% MAE (target)</dd>
+            <dt>Mission Planning</dt>
+            <dd>&lt;5% MAE (certified)</dd>
+            <dt>Hardware Replacement</dt>
+            <dd>&lt;5% MAE (certified)</dd>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- ECOSYSTEM -->
+    <section class="section bg-dark" id="ecosystem">
+      <div class="container">
+        <div class="section-header center">
+          <p class="eyebrow">Ecosystem</p>
+          <h2>Open Science at the Core. Secure Collaboration at the Edge.</h2>
+        </div>
+        <div class="ecosystem-grid">
+          <div class="card ecosystem-card">
+            <h3>Open Core</h3>
+            <ul>
+              <li>Apache 2.0 model architectures</li>
+              <li>Standardized design and data schemas</li>
+              <li>Reproducible benchmarks</li>
+              <li>Community-driven extensions</li>
+            </ul>
+          </div>
+          <div class="card ecosystem-card amber">
+            <h3>Secure & Federated</h3>
+            <ul>
+              <li>Proprietary data never leaves your environment</li>
+              <li>Differential privacy guarantees</li>
+              <li>Secure aggregation of model updates</li>
+              <li>Export-control-aware collaboration</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PARTNERS -->
+    <section class="section bg-darker" id="partners">
+      <div class="container">
+        <div class="section-header center">
+          <p class="eyebrow">Partners</p>
+          <h2>Partner with QuantumLeap</h2>
+          <p>QuantumLeap is forming early partnerships with government sponsors, national laboratories, academic institutions, and industry leaders to define the next generation of quantum sensing infrastructure.</p>
+        </div>
+        <div class="cards-grid-3">
+          <div class="card card-hover partner-card">
+            <h3>Government Sponsors</h3>
+            <p>Pilot programs, mission-driven validation, and transition-to-field pathways.</p>
+          </div>
+          <div class="card card-hover partner-card">
+            <h3>Labs & Academia</h3>
+            <p>Benchmarks, publications, training datasets, and student engagement.</p>
+          </div>
+          <div class="card card-hover partner-card">
+            <h3>Industry</h3>
+            <p>SWaP-C designs, protected data collaboration, and transition-to-field support.</p>
+          </div>
+        </div>
+        <div class="center" style="margin-top: 48px;">
+          <a href="#contact" class="btn btn-primary btn-lg">Request Partnership Access</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section bg-dark" id="about">
+      <div class="container">
+        <div class="section-header center">
+          <p class="eyebrow">About</p>
+          <h2>Built by NPS / NPSF and Partners</h2>
+          <p>QuantumLeap is a Naval Postgraduate School Foundation / Naval Postgraduate School initiative to accelerate quantum sensing research and mission transition.</p>
+          <p style="margin-top: 16px;">The platform is designed to serve faculty, students, DoD sponsors, national laboratories, academic partners, and industry collaborators—through validated prediction, reproducible benchmarks, and an open ecosystem.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- UPDATES -->
+    <section class="section bg-darker" id="updates">
+      <div class="container">
+        <div class="section-header center">
+          <p class="eyebrow">Updates</p>
+          <h2>Progress and Publications</h2>
+        </div>
+        <div class="cards-grid-3">
+          <div class="card update-card card-hover">
+            <h4>MVP Predictor Milestones</h4>
+            <p>Tracking progress toward validated prediction capabilities for core interferometer configurations.</p>
+          </div>
+          <div class="card update-card card-hover">
+            <h4>Benchmark & Validation Results</h4>
+            <p>Published results from cross-institutional validation campaigns and accuracy assessments.</p>
+          </div>
+          <div class="card update-card card-hover">
+            <h4>Community Calls & Events</h4>
+            <p>Upcoming webinars, workshops, and community engagement opportunities.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="section bg-dark final-cta" id="contact">
+      <div class="container">
+        <h2>Build the Future of Quantum Sensing—Together</h2>
+        <p>QuantumLeap is forming early partnerships with government sponsors, national laboratories, academic institutions, and industry leaders to co-develop the future of atom interferometry.</p>
+        <div class="btn-group">
+          <a href="#" class="btn btn-primary btn-lg">Request Partnership Access</a>
+          <a href="#ecosystem" class="btn btn-outline btn-lg">Join the Community</a>
+        </div>
+        <p class="tagline">QuantumLeap · AI-Driven Digital Twin for Atom Interferometry</p>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="logo">Quantum<span>Leap</span></div>
+            <p>Validated digital twins for atom interferometry.</p>
+          </div>
+          <div class="footer-column">
+            <h4>Platform</h4>
+            <ul>
+              <li><a href="#top">Home</a></li>
+              <li><a href="#platform">Platform</a></li>
+              <li><a href="#use-cases">Use Cases</a></li>
+              <li><a href="#validation">Validation</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h4>Community</h4>
+            <ul>
+              <li><a href="#ecosystem">Ecosystem</a></li>
+              <li><a href="#partners">Partners</a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="#updates">Updates</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h4>Contact</h4>
+            <ul>
+              <li><a href="mailto:contact@quantumleap.ai">contact@quantumleap.ai</a></li>
+              <li><a href="#contact">Partnership Access</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>© 2026 QuantumLeap. UNCLASSIFIED.</p>
+          <p>Naval Postgraduate School Foundation / Naval Postgraduate School</p>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>
