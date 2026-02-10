@@ -555,6 +555,24 @@
       min-height: 450px;
     }
 
+    .hero-img {
+      width: 100%;
+      height: 100%;
+      min-height: 450px;
+      max-height: 550px;
+      object-fit: cover;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+
+    .section-feature-image img {
+      width: 100%;
+      max-height: 480px;
+      object-fit: cover;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+
     /* ============================================
        SECTION HEADERS
     ============================================ */
@@ -958,9 +976,7 @@
             </div>
           </div>
           <div class="hero-visual">
-            <div class="image-card">
-              <span>Hybrid Hero Visual<br>(Interference fringes + lab instrumentation + waveforms)</span>
-            </div>
+            <img src="hero-interference.png" alt="Matter-wave interference fringes with lab instrumentation" class="hero-img">
           </div>
         </div>
       </div>
@@ -999,6 +1015,9 @@
           <p class="eyebrow">Core Innovations</p>
           <h2>Two Breakthroughs. One Platform.</h2>
         </div>
+        <div class="section-feature-image center" style="margin-bottom:48px;">
+          <img src="interferometer-hardware.png" alt="Atom interferometer hardware with laser cooling and vacuum chamber">
+        </div>
         <div class="cards-grid-2">
           <div class="card card-hover">
             <h3>Real-to-Sim Collaborative Learning</h3>
@@ -1030,6 +1049,9 @@
         <div class="section-header center">
           <p class="eyebrow">Workflow</p>
           <h2>From Design to Deployment—In Software</h2>
+        </div>
+        <div class="section-feature-image center" style="margin-bottom:48px;">
+          <img src="platform-dashboard.png" alt="QuantumLeap platform dashboard with sensor data and analysis">
         </div>
         <div class="process-strip">
           <span class="process-step">Design</span>
@@ -1069,6 +1091,9 @@
         <div class="section-header center">
           <p class="eyebrow">Use Cases</p>
           <h2>Built for Research, Operations, and Transition to Field</h2>
+        </div>
+        <div class="section-feature-image center" style="margin-bottom:48px;">
+          <img src="gps-denied-nav.png" alt="GPS-denied submarine navigation using quantum inertial sensors">
         </div>
         <div class="cards-grid-4">
           <div class="card card-hover">
@@ -1128,6 +1153,9 @@
         <div class="section-header center">
           <p class="eyebrow">Ecosystem</p>
           <h2>Open Science at the Core. Secure Collaboration at the Edge.</h2>
+        </div>
+        <div class="section-feature-image center" style="margin-bottom:48px;">
+          <img src="federated-learning.png" alt="Federated learning network connecting research institutions">
         </div>
         <div class="ecosystem-grid">
           <div class="card ecosystem-card">
